@@ -361,11 +361,17 @@ class dlis(object):
             A defaultdict index by object-type
 
         """
-        recs = [rec
-            for rec, t
-            in zip(self.attic, self.record_types)
-            if (t not in self.types and not rec.encrypted)
-        ]
+
+
+        recs = []
+
+        for record, type in zip(self.attic, self.record_types):
+
+            if type in self.types: continue
+            if record.encrypted: continue
+            if type in self.indexedobjects.items(): continue
+            recs.append(record)
+
         self.load(recs, reload=False)
 
         unknowns = defaultdict(list)
